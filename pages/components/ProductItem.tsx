@@ -4,22 +4,30 @@ type product = {
 	id: number;
 	price: number;
 	title: string;
+	priceFormatted: string;
 };
 
-const ProductItemComponent = (product: product) => {
+interface props {
+	product: product;
+	onAddToWishList: (id: number) => void;
+}
+
+const ProductItemComponent = ({ product, onAddToWishList }: props) => {
 	return (
 		<li>
-			{product.title} - <strong>{product.price}</strong>
+			{product.title} - <strong>{product.priceFormatted}</strong>
+			<button
+				onClick={() => onAddToWishList(product.id)}
+				role='button'
+				type='button'>
+				Add Whitelist
+			</button>
 		</li>
 	);
 };
 
-const ProductItem = memo(ProductItemComponent, (prevProduct, nextProduct) => {
-	return (
-		prevProduct.id === nextProduct.id &&
-		prevProduct.price === nextProduct.price &&
-		prevProduct.title === nextProduct.title
-	);
+const ProductItem = memo(ProductItemComponent, (prev, next) => {
+	return Object.is(prev.product, next.product);
 });
 
 export default ProductItem;
